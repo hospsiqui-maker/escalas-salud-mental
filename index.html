@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A2540">
+  <title>Escalas Salud Mental</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="src/styles.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">MVP clinico</p>
+      <h1>Escalas Salud Mental</h1>
+    </div>
+    <div class="header-actions">
+      <span id="driveStatus" class="status-pill">Drive no conectado</span>
+      <button id="connectDrive" class="icon-button" type="button" title="Conectar Google Drive" aria-label="Conectar Google Drive">
+        <span>Drive</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="panel patient-panel" aria-labelledby="paciente-titulo">
+      <div class="panel-heading">
+        <p class="eyebrow">Primera consulta</p>
+        <h2 id="paciente-titulo">Modulo breve de orientacion</h2>
+      </div>
+
+      <form id="screeningForm" class="form-grid">
+        <fieldset class="fieldset full">
+          <legend>Consentimiento</legend>
+          <label class="check-row">
+            <input id="consent" name="consent" type="checkbox" required>
+            <span>El paciente autoriza registrar estas respuestas como apoyo a su atencion clinica y posible anexo a su historia clinica.</span>
+          </label>
+          <p class="fine-print">Esta herramienta no diagnostica por si sola, no reemplaza la evaluacion profesional y debe interpretarse dentro de la consulta.</p>
+        </fieldset>
+
+        <label>
+          Codigo del paciente
+          <input name="patientCode" autocomplete="off" placeholder="Ej. MS-0001" required>
+        </label>
+        <label>
+          Edad
+          <input name="age" type="number" min="12" max="100" placeholder="Anios" required>
+        </label>
+        <label>
+          Sexo / genero
+          <select name="sex">
+            <option value="">Prefiere no indicar</option>
+            <option>Femenino</option>
+            <option>Masculino</option>
+            <option>Otro</option>
+          </select>
+        </label>
+        <label>
+          Motivo principal
+          <select name="reason" required>
+            <option value="">Seleccionar</option>
+            <option>Sueno / descanso</option>
+            <option>Ansiedad / tension</option>
+            <option>Animo / energia</option>
+            <option>Estres / sobrecarga</option>
+            <option>Atencion / rendimiento</option>
+            <option>Otro</option>
+          </select>
+        </label>
+
+        <fieldset class="fieldset full">
+          <legend>Termometro de funcionamiento, 0 a 10</legend>
+          <div id="thermometers" class="slider-grid"></div>
+        </fieldset>
+
+        <fieldset class="fieldset full">
+          <legend>Escalas ultrabreves</legend>
+          <div id="briefScales" class="question-stack"></div>
+        </fieldset>
+
+        <fieldset class="fieldset full">
+          <legend>Alertas clinicas</legend>
+          <div id="riskFlags" class="check-grid"></div>
+        </fieldset>
+
+        <fieldset class="fieldset full">
+          <legend>Perfil breve de rasgos</legend>
+          <p class="fine-print">Orientativo. Describe estilo de funcionamiento; no es diagnostico de personalidad.</p>
+          <div id="personalityItems" class="question-stack"></div>
+        </fieldset>
+
+        <label class="full">
+          Observacion breve del medico
+          <textarea name="clinicianNote" rows="3" placeholder="Dato contextual util para la proxima consulta"></textarea>
+        </label>
+
+        <div class="actions full">
+          <button class="primary" type="submit">Calcular resultados</button>
+          <button id="resetForm" type="button">Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="panel results-panel" aria-labelledby="resultados-titulo">
+      <div class="panel-heading">
+        <p class="eyebrow">Pantalla del paciente</p>
+        <h2 id="resultados-titulo">Resultados inmediatos</h2>
+      </div>
+      <div id="emptyState" class="empty-state">
+        Completa el modulo para mostrar un resumen claro al paciente y preparar el archivo clinico.
+      </div>
+      <div id="results" class="results" hidden></div>
+      <div id="afterCare" class="after-care" hidden>
+        <h3>Para casa</h3>
+        <p>El medico puede activar escalas complementarias para responder con calma antes de la proxima consulta.</p>
+        <ul id="homeScales"></ul>
+      </div>
+      <div class="actions">
+        <button id="saveDrive" class="primary" type="button" disabled>Guardar en Drive</button>
+        <button id="downloadJson" type="button" disabled>Descargar JSON</button>
+        <button id="printSummary" type="button" disabled>Imprimir resumen</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="app-footer">
+    <span>Datos sensibles: usar primero con pacientes ficticios.</span>
+    <span>Scope Drive: drive.file</span>
+  </footer>
+
+  <script src="src/app.js" type="module"></script>
+</body>
+</html>
