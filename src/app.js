@@ -59,7 +59,6 @@ const emptyState = document.querySelector("#emptyState");
 const afterCare = document.querySelector("#afterCare");
 const homeScales = document.querySelector("#homeScales");
 const saveDriveButton = document.querySelector("#saveDrive");
-const downloadJsonButton = document.querySelector("#downloadJson");
 const printSummaryButton = document.querySelector("#printSummary");
 const driveStatus = document.querySelector("#driveStatus");
 
@@ -198,7 +197,6 @@ function buildPayload(values, scores) {
     riskFlags: Object.fromEntries(riskFlags.map(([id, label]) => [id, { label, present: values[id] }])),
     personality: scores.personality,
     homeScales: recommendations(scores, values),
-    clinicianNote: values.clinicianNote || "",
     disclaimer: "Resultados orientativos. Requieren interpretacion por profesional tratante."
   };
 }
@@ -225,7 +223,6 @@ function renderResults(payload) {
   results.hidden = false;
   afterCare.hidden = false;
   saveDriveButton.disabled = false;
-  downloadJsonButton.disabled = false;
   printSummaryButton.disabled = false;
 }
 
@@ -243,16 +240,6 @@ function metric(title, value, label, klass, help) {
 
 function personalityText(personality) {
   return Object.entries(personality).map(([trait, value]) => `${trait} ${value}/5`).join(" · ");
-}
-
-function downloadJson() {
-  if (!latestPayload) return;
-  const blob = new Blob([JSON.stringify(latestPayload, null, 2)], { type: "application/json" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = fileBaseName(latestPayload) + ".json";
-  link.click();
-  URL.revokeObjectURL(link.href);
 }
 
 function fileBaseName(payload) {
@@ -279,7 +266,7 @@ function initDrive() {
         return;
       }
       accessToken = response.access_token;
-      driveStatus.textContent = "Drive conectado";
+      driveStatus.textContent = "Drive del medico conectado";
       driveStatus.classList.add("is-on");
     }
   });
@@ -300,11 +287,11 @@ async function saveToDrive() {
     const htmlFile = new Blob([summaryHtml(latestPayload)], { type: "text/html" });
     await uploadDriveFile(`${fileBaseName(latestPayload)}.json`, jsonFile, folderId, "application/json");
     await uploadDriveFile(`${fileBaseName(latestPayload)}.html`, htmlFile, folderId, "text/html");
-    saveDriveButton.textContent = "Guardado en Drive";
+    saveDriveButton.textContent = "Guardado en Drive del medico";
   } catch (error) {
     console.error(error);
     alert("No se pudo guardar en Drive. Revisa autorizacion, usuario de prueba y origen localhost.");
-    saveDriveButton.textContent = "Guardar en Drive";
+    saveDriveButton.textContent = "Guardar en Drive del medico";
   } finally {
     saveDriveButton.disabled = false;
   }
@@ -371,7 +358,6 @@ function summaryHtml(payload) {
   <p>${personalityText(payload.personality)}</p>
   <h2>Escalas sugeridas para casa</h2>
   <ul>${payload.homeScales.map((item) => `<li>${item}</li>`).join("")}</ul>
-  <p><strong>Nota:</strong> ${payload.clinicianNote || "Sin nota adicional."}</p>
   <p>${payload.disclaimer}</p></body></html>`;
 }
 
@@ -391,13 +377,11 @@ document.querySelector("#resetForm").addEventListener("click", () => {
   results.hidden = true;
   afterCare.hidden = true;
   saveDriveButton.disabled = true;
-  downloadJsonButton.disabled = true;
   printSummaryButton.disabled = true;
 });
 
 document.querySelector("#connectDrive").addEventListener("click", initDrive);
 saveDriveButton.addEventListener("click", saveToDrive);
-downloadJsonButton.addEventListener("click", downloadJson);
 printSummaryButton.addEventListener("click", printSummary);
 
 renderInputs();

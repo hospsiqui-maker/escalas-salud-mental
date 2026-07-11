@@ -12,13 +12,13 @@
 <body>
   <header class="app-header">
     <div>
-      <p class="eyebrow">MVP clinico</p>
+      <p class="eyebrow">Consulta de prueba</p>
       <h1>Escalas Salud Mental</h1>
     </div>
     <div class="header-actions">
-      <span id="driveStatus" class="status-pill">Drive no conectado</span>
-      <button id="connectDrive" class="icon-button" type="button" title="Conectar Google Drive" aria-label="Conectar Google Drive">
-        <span>Drive</span>
+      <span id="driveStatus" class="status-pill">Drive del medico no conectado</span>
+      <button id="connectDrive" class="icon-button" type="button" title="Conectar Drive del medico" aria-label="Conectar Drive del medico">
+        <span>Conectar Drive del medico</span>
       </button>
     </div>
   </header>
@@ -35,7 +35,7 @@
           <legend>Consentimiento</legend>
           <label class="check-row">
             <input id="consent" name="consent" type="checkbox" required>
-            <span>El paciente autoriza registrar estas respuestas como apoyo a su atencion clinica y posible anexo a su historia clinica.</span>
+            <span>Autorizo registrar estas respuestas como apoyo a mi atencion clinica y posible anexo a mi historia clinica.</span>
           </label>
           <p class="fine-print">Esta herramienta no diagnostica por si sola, no reemplaza la evaluacion profesional y debe interpretarse dentro de la consulta.</p>
         </fieldset>
@@ -90,12 +90,6 @@
           <p class="fine-print">Orientativo. Describe estilo de funcionamiento; no es diagnostico de personalidad.</p>
           <div id="personalityItems" class="question-stack"></div>
         </fieldset>
-
-        <label class="full">
-          Observacion breve del medico
-          <textarea name="clinicianNote" rows="3" placeholder="Dato contextual util para la proxima consulta"></textarea>
-        </label>
-
         <div class="actions full">
           <button class="primary" type="submit">Calcular resultados</button>
           <button id="resetForm" type="button">Limpiar</button>
@@ -109,7 +103,7 @@
         <h2 id="resultados-titulo">Resultados inmediatos</h2>
       </div>
       <div id="emptyState" class="empty-state">
-        Completa el modulo para mostrar un resumen claro al paciente y preparar el archivo clinico.
+        Completa el modulo para ver un resumen inmediato. El archivo clinico se puede guardar despues en el Drive autorizado por el medico.
       </div>
       <div id="results" class="results" hidden></div>
       <div id="afterCare" class="after-care" hidden>
@@ -118,8 +112,7 @@
         <ul id="homeScales"></ul>
       </div>
       <div class="actions">
-        <button id="saveDrive" class="primary" type="button" disabled>Guardar en Drive</button>
-        <button id="downloadJson" type="button" disabled>Descargar JSON</button>
+        <button id="saveDrive" class="primary" type="button" disabled>Guardar en Drive del medico</button>
         <button id="printSummary" type="button" disabled>Imprimir resumen</button>
       </div>
     </aside>
